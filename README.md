@@ -1,3 +1,3 @@
 # TripSplitter
 
-Split trip expenses fairly.
+Split trip expenses between friends, fairly.
