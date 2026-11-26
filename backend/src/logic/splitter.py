@@ -4,6 +4,8 @@ from src.models.money import Money
 
 class ExpenseSplitter:
     def split_equally(self, expense_id, total, user_ids):
+        if not user_ids:
+            raise ValueError("nobody to split the bill between")
         each, leftover = divmod(total.cents, len(user_ids))
         shares = []
         for place, user_id in enumerate(user_ids):
