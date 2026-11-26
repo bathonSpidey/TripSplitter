@@ -1,18 +1,17 @@
+from src.models.money import Money
+
+
 class BalanceCalculator:
-    def balances(self, expenses, shares):
+    def balances(self, trip):
+        nothing = Money(0, trip.base_currency)
         result = {}
-        counted = []
-        for expense in expenses:
-            if expense.status != "disputed":
-                counted.append(expense)
+        counted = [e for e in trip.expenses if e.counts()]
         ids = [expense.id for expense in counted]
         for expense in counted:
             who = expense.paid_by
-            total = result.get(who, 0)
-            result[who] = total + expense.amount_cents
-        for share in shares:
+            result[who] = result.get(who, nothing) + expense.amount
+        for share in trip.shares:
             if share.expense_id in ids:
                 who = share.user_id
-                total = result.get(who, 0)
-                result[who] = total - share.share_cents
+                result[who] = result.get(who, nothing) - share.amount
         return result
