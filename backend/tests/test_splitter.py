@@ -1,3 +1,5 @@
+import pytest
+
 from src.logic.splitter import ExpenseSplitter
 from src.models.money import Money
 
@@ -41,3 +43,8 @@ def test_everyone_can_pay_for_what_they_had():
     amounts = {who: Money.parse(text, "EUR") for who, text in had.items()}
     shares = ExpenseSplitter().split_individually(1, amounts)
     assert [share.amount.cents for share in shares] == [6000, 2600, 400]
+
+
+def test_a_bill_cannot_be_split_between_nobody():
+    with pytest.raises(ValueError):
+        ExpenseSplitter().split_equally(1, Money(9000, "EUR"), [])

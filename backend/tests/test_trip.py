@@ -45,3 +45,10 @@ def test_a_trip_only_takes_its_own_currency():
 def test_there_is_no_window_into_a_trip():
     with pytest.raises(AttributeError):
         prague().expenses.append(dinner())
+
+
+def test_a_negative_share_cannot_sneak_into_a_trip():
+    with pytest.raises(ValueError):
+        too_much = ExpenseShare(1, 2, Money.parse("100", "EUR"))
+        minus_ten = ExpenseShare(1, 3, Money.parse("-10", "EUR"))
+        prague().add_expense(dinner(), [too_much, minus_ten])
